@@ -1,0 +1,23 @@
+---
+jobs:
+  - name: job-hello-world-linux
+    public: true
+    plan:
+      - task: hello-world
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: busybox}
+          run:
+            path: echo
+            args: [hello world]
+  - name: job-hello-world-windows
+    public: true
+    plan:
+      - task: hello-world
+        config:
+          platform: windows
+          run:
+            path: powershell
+            args: [echo hello world]

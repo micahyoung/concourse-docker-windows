@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  concourse-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: concourse
+      POSTGRES_PASSWORD: concourse_pass
+      POSTGRES_USER: concourse_user
+      PGDATA: /database
+
+  concourse-web:
+    build:
+      context: .
+      dockerfile: concourse-linux.Dockerfile
+    command: web
+    privileged: true
+    depends_on: [concourse-db]
+    ports: ["8080:8080","2222:2222"]
+    environment:
+      CONCOURSE_POSTGRES_HOST: concourse-db
+      CONCOURSE_POSTGRES_USER: concourse_user
+      CONCOURSE_POSTGRES_PASSWORD: concourse_pass
+      CONCOURSE_POSTGRES_DATABASE: concourse
+      CONCOURSE_EXTERNAL_URL: http://${LINUX_HOST_IP}:8080
+      CONCOURSE_ADD_LOCAL_USER: test:test
+      CONCOURSE_MAIN_TEAM_LOCAL_USER: test
+      CONCOURSE_TSA_AUTHORIZED_KEYS: "/secrets/worker_key.pub"
+      CONCOURSE_TSA_HOST_KEY: "/secrets/tsa_host_key"
+  concourse-linux-worker:
+    build:
+      context: .
+      dockerfile: concourse-linux.Dockerfile
+    command: worker
+    privileged: true
+    depends_on: [concourse-web]
+    environment:
+      CONCOURSE_TSA_HOST: "${LINUX_HOST_IP}:2222"
+      CONCOURSE_TSA_WORKER_PRIVATE_KEY: '/secrets/worker_key'
+      CONCOURSE_TSA_PUBLIC_KEY: '/secrets/tsa_host_key.pub'
+      CONCOURSE_EPHEMERAL: "true"
+  concourse-windows-worker:
+    build:
+      context: .
+      dockerfile: concourse-windows.Dockerfile
+    command: worker
+    environment:
+      CONCOURSE_WORK_DIR: 'c:\work'
+      CONCOURSE_TSA_HOST: "${LINUX_HOST_IP}:2222"
+      CONCOURSE_TSA_WORKER_PRIVATE_KEY: 'c:\secrets\worker_key'
+      CONCOURSE_TSA_PUBLIC_KEY: 'c:\secrets\tsa_host_key.pub'
+      CONCOURSE_EPHEMERAL: "true"
