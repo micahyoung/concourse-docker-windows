@@ -12,14 +12,14 @@
 export LINUX_HOST_IP="192.168.175.10"
 export DOCKER_HOST="tcp://$LINUX_HOST_IP:2376" 
 export DOCKER_TLS_VERIFY=1
-export DOCKERT_CERT_PATH=<wherever your certs are>
+export DOCKERT_CERT_PATH=<wherever your docker certs are>
 ```
 
 `docker-windows-env.sh`:
 ```bash
-export WINDOWS_HOST_IP="192.168.175.10"
+export WINDOWS_HOST_IP="192.168.175.7"
 export DOCKER_HOST="tcp://$WINDOWS_HOST_IP:2376"
 export DOCKER_TLS_VERIFY=1
-export DOCKERT_CERT_PATH=<wherever your certs are>
+export DOCKERT_CERT_PATH=<wherever your docker certs are>
 ```
 1. Run `up.sh`
