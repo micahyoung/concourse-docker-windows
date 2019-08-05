@@ -29,7 +29,7 @@ docker-compose up --detach --build concourse-windows-worker
 
 sleep 5
 
-fly -t test login -u test -p test -c http://192.168.175.10:8080/
+fly -t test login -u test -p test -c http://$LINUX_HOST_IP:8080/
 
 fly -t test set-pipeline -p hello-world -c hello-world-pipeline.yml --non-interactive
 
