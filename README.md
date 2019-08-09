@@ -1,4 +1,4 @@
-# example of concourse basic tutorial using linux and windows workers
+# Concourse basic tutorial using linux and windows workers
 
 ## Prerequisiters
 1. Docker linux host with TLS enabled and public IP
